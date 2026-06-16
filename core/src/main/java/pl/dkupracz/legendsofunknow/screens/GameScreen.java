@@ -5,27 +5,38 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import pl.dkupracz.legendsofunknow.render.IsometricRenderer;
+import pl.dkupracz.legendsofunknow.world.GameMap;
 
 public class GameScreen  implements Screen {
 
     private SpriteBatch batch;
     private BitmapFont font;
 
+    private GameMap gameMap;
+    private IsometricRenderer isometricRenderer;
+
     @Override
     public void show() {
         batch = new SpriteBatch();
         font = new BitmapFont();
-        font.getData().setScale(2);
+
+        gameMap = new GameMap(10, 10);
+        isometricRenderer = new IsometricRenderer();
     }
 
     @Override
     public void render(float delta) {
         clearScreen();
+
+        isometricRenderer.render(gameMap, 360, 120);
+
         batch.begin();
-        font.draw(batch, "Legends of Unknow", 80, 360);
-        font.getData().setScale(1.2f);
-        font.draw(batch, "Isometric dark fantasy action-RPG", 80, 320);
-        font.getData().setScale(2f);
+        font.getData().setScale(1.5f);
+        font.draw(batch, "Legends of Unknow", 30, 460);
+        font.getData().setScale(1f);
+        font.draw(batch, "Checkpoint 3: isometric test map", 30, 435);
+
         batch.end();
     }
 
@@ -58,5 +69,6 @@ public class GameScreen  implements Screen {
     public void dispose() {
         batch.dispose();
         font.dispose();
+        isometricRenderer.dispose();
     }
 }
