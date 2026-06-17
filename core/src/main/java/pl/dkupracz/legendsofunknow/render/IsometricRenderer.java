@@ -2,6 +2,8 @@ package pl.dkupracz.legendsofunknow.render;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
+
 import pl.dkupracz.legendsofunknow.entities.Player;
 import pl.dkupracz.legendsofunknow.world.GameMap;
 import pl.dkupracz.legendsofunknow.world.TileType;
@@ -122,6 +124,10 @@ public class IsometricRenderer {
             case BLOCKED -> new Color(0.22f, 0.08f, 0.08f, 1f);
             case SPAWN -> new Color(0.08f, 0.18f, 0.10f, 1f);
         };
+    }
+
+    public void setProjectionMatrix(Matrix4 projectionMatrix) {
+        shapeRenderer.setProjectionMatrix(projectionMatrix);
     }
 
     public void dispose() {

@@ -13,6 +13,9 @@ public final class GameConfig {
 
     public static final float PLAYER_MOVE_COOLDOWN = 0.15f;
 
+    public static final float WORLD_WIDTH = 800f;
+    public static final float WORLD_HEIGHT = 480f;
+
     private GameConfig() {
         // Utility class
     }

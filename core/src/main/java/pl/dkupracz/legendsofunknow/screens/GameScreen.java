@@ -3,8 +3,11 @@ package pl.dkupracz.legendsofunknow.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import pl.dkupracz.legendsofunknow.entities.Player;
 import pl.dkupracz.legendsofunknow.render.IsometricRenderer;
@@ -16,8 +19,11 @@ public class GameScreen  implements Screen {
 
     private SpriteBatch batch;
     private BitmapFont font;
-    private PlayerInputController playerInputController;
 
+    private OrthographicCamera camera;
+    private Viewport viewport;
+
+    private PlayerInputController playerInputController;
     private GameMap gameMap;
     private IsometricRenderer isometricRenderer;
     Player player;
@@ -26,6 +32,12 @@ public class GameScreen  implements Screen {
     public void show() {
         batch = new SpriteBatch();
         font = new BitmapFont();
+
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
+        viewport.apply();
+
+        camera.position.set(GameConfig.WORLD_WIDTH / 2f, GameConfig.WORLD_HEIGHT / 2f, 0f);
 
         gameMap = new GameMap(GameConfig.MAP_WIDTH, GameConfig.MAP_HEIGHT);
         player = new Player(0, 0);
@@ -38,8 +50,12 @@ public class GameScreen  implements Screen {
     public void render(float delta) {
 
         playerInputController.update(delta);
+
         clearScreen();
 
+        camera.update();
+
+        isometricRenderer.setProjectionMatrix(camera.combined);
         isometricRenderer.render(
             gameMap,
             player,
@@ -47,11 +63,12 @@ public class GameScreen  implements Screen {
             GameConfig.MAP_OFFSET_Y
         );
 
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         font.getData().setScale(1.5f);
         font.draw(batch, "Legends of Unknow", 30, 460);
         font.getData().setScale(1f);
-        font.draw(batch, "Checkpoint 7: input refactor", 30, 435);
+        font.draw(batch, "Checkpoint 9: camera + viewport", 30, 435);
         font.draw(batch, "Player position: " + player.getMapX() + ", " + player.getMapY(), 30, 410);
         font.draw(batch, "Move: W/A/S/D or arrows", 30, 385);
 
@@ -66,7 +83,7 @@ public class GameScreen  implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        //TO DO
+        viewport.update(width, height, true);
     }
 
     @Override
