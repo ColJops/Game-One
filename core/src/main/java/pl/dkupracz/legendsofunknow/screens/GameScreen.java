@@ -20,8 +20,11 @@ public class GameScreen  implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
 
-    private OrthographicCamera camera;
-    private Viewport viewport;
+    private OrthographicCamera worldCamera;
+    private Viewport worldViewport;
+
+    private OrthographicCamera hudCamera;
+    private Viewport hudViewport;
 
     private PlayerInputController playerInputController;
     private GameMap gameMap;
@@ -33,11 +36,19 @@ public class GameScreen  implements Screen {
         batch = new SpriteBatch();
         font = new BitmapFont();
 
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
-        viewport.apply();
+        worldCamera = new OrthographicCamera();
+        worldViewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, worldCamera);
+        worldViewport.apply();
 
-        camera.position.set(GameConfig.WORLD_WIDTH / 2f, GameConfig.WORLD_HEIGHT / 2f, 0f);
+        worldCamera.position.set(GameConfig.WORLD_WIDTH / 2f, GameConfig.WORLD_HEIGHT / 2f, 0f);
+        worldCamera.update();
+
+        hudCamera = new OrthographicCamera();
+        hudViewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, hudCamera);
+        hudViewport.apply();
+
+        hudCamera.position.set(GameConfig.WORLD_WIDTH / 2f, GameConfig.WORLD_HEIGHT / 2f, 0f);
+        hudCamera.update();
 
         gameMap = new GameMap(GameConfig.MAP_WIDTH, GameConfig.MAP_HEIGHT);
         player = new Player(0, 0);
@@ -48,31 +59,36 @@ public class GameScreen  implements Screen {
 
     @Override
     public void render(float delta) {
-
         playerInputController.update(delta);
         updateCamera(delta);
 
         clearScreen();
 
-        camera.update();
+        renderWorld();
+        renderHud();
+    }
 
-        isometricRenderer.setProjectionMatrix(camera.combined);
+    private void renderWorld() {
+        isometricRenderer.setProjectionMatrix(worldCamera.combined);
         isometricRenderer.render(
             gameMap,
             player,
             GameConfig.MAP_OFFSET_X,
             GameConfig.MAP_OFFSET_Y
         );
+    }
 
-        batch.setProjectionMatrix(camera.combined);
+    private void renderHud() {
+        batch.setProjectionMatrix(hudCamera.combined);
+
         batch.begin();
         font.getData().setScale(1.5f);
         font.draw(batch, "Legends of Unknow", 30, 460);
+
         font.getData().setScale(1f);
-        font.draw(batch, "Checkpoint 10: camera follow", 30, 435);
+        font.draw(batch, "Checkpoint 11: separate HUD camera", 30, 435);
         font.draw(batch, "Player position: " + player.getMapX() + ", " + player.getMapY(), 30, 410);
         font.draw(batch, "Move: W/A/S/D or arrows", 30, 385);
-
         batch.end();
     }
 
@@ -94,15 +110,16 @@ public class GameScreen  implements Screen {
             GameConfig.MAP_OFFSET_Y
         );
 
-        camera.position.x += (playerScreenX - camera.position.x) * GameConfig.CAMERA_FOLLOW_SPEED * delta;
-        camera.position.y += (playerScreenY - camera.position.y) * GameConfig.CAMERA_FOLLOW_SPEED * delta;
+        worldCamera.position.x += (playerScreenX - worldCamera.position.x) * GameConfig.CAMERA_FOLLOW_SPEED * delta;
+        worldCamera.position.y += (playerScreenY - worldCamera.position.y) * GameConfig.CAMERA_FOLLOW_SPEED * delta;
 
-        camera.update();
+        worldCamera.update();
     }
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        worldViewport.update(width, height, true);
+        hudViewport.update(width, height, true);
     }
 
     @Override
