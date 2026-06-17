@@ -5,12 +5,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import pl.dkupracz.legendsofunknow.entities.Player;
 import pl.dkupracz.legendsofunknow.world.GameMap;
 import pl.dkupracz.legendsofunknow.world.TileType;
+import pl.dkupracz.legendsofunknow.config.GameConfig;
+
 
 
 public class IsometricRenderer {
-
-    private static final int TILE_WIDTH = 64;
-    private static final int TILE_HEIGHT = 32;
 
     private final ShapeRenderer shapeRenderer;
 
@@ -93,35 +92,28 @@ public class IsometricRenderer {
     }
 
     private float[] calculateTilePoints(int mapX, int mapY, float offsetX, float offsetY) {
-        float screenX = toScreenX(mapX, mapY, offsetX);
-        float screenY = toScreenY(mapX, mapY, offsetY);
+        float centerX = toScreenX(mapX, mapY, offsetX);
+        float centerY = toScreenY(mapX, mapY, offsetY);
 
-        float topX = screenX;
-        float topY = screenY + TILE_HEIGHT / 2f;
-
-        float rightX = screenX + TILE_WIDTH / 2f;
-        float rightY = screenY;
-
-        float bottomX = screenX;
-        float bottomY = screenY - TILE_HEIGHT / 2f;
-
-        float leftX = screenX - TILE_WIDTH / 2f;
-        float leftY = screenY;
+        float topY = centerY + GameConfig.TILE_HEIGHT / 2f;
+        float rightX = centerX + GameConfig.TILE_WIDTH / 2f;
+        float bottomY = centerY - GameConfig.TILE_HEIGHT / 2f;
+        float leftX = centerX - GameConfig.TILE_WIDTH / 2f;
 
         return new float[]{
-            topX, topY,
-            rightX, rightY,
-            bottomX, bottomY,
-            leftX, leftY
+            centerX, topY,
+            rightX, centerY,
+            centerX, bottomY,
+            leftX, centerY
         };
     }
 
     private float toScreenX(int mapX, int mapY, float offsetX) {
-        return (mapX - mapY) * TILE_WIDTH / 2f + offsetX;
+        return (mapX - mapY) * GameConfig.TILE_WIDTH / 2f + offsetX;
     }
 
     private float toScreenY(int mapX, int mapY, float offsetY) {
-        return (mapX + mapY) * TILE_HEIGHT / 2f + offsetY;
+        return (mapX + mapY) * GameConfig.TILE_HEIGHT / 2f + offsetY;
     }
 
     private Color getTileColor(TileType tileType) {

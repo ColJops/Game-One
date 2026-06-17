@@ -4,10 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import pl.dkupracz.legendsofunknow.entities.Player;
 import pl.dkupracz.legendsofunknow.world.GameMap;
+import pl.dkupracz.legendsofunknow.config.GameConfig;
 
 public class PlayerInputController {
-
-    private static final float MOVE_COOLDOWN_TIME = 0.15f;
 
     private final Player player;
     private final GameMap gameMap;
@@ -42,6 +41,6 @@ public class PlayerInputController {
     }
 
     private void resetCooldown() {
-        moveCooldown = MOVE_COOLDOWN_TIME;
+        moveCooldown = GameConfig.PLAYER_MOVE_COOLDOWN;
     }
 }

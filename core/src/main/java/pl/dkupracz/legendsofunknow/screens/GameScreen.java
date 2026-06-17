@@ -10,6 +10,7 @@ import pl.dkupracz.legendsofunknow.entities.Player;
 import pl.dkupracz.legendsofunknow.render.IsometricRenderer;
 import pl.dkupracz.legendsofunknow.world.GameMap;
 import pl.dkupracz.legendsofunknow.input.PlayerInputController;
+import pl.dkupracz.legendsofunknow.config.GameConfig;
 
 public class GameScreen  implements Screen {
 
@@ -26,7 +27,7 @@ public class GameScreen  implements Screen {
         batch = new SpriteBatch();
         font = new BitmapFont();
 
-        gameMap = new GameMap(10, 10);
+        gameMap = new GameMap(GameConfig.MAP_WIDTH, GameConfig.MAP_HEIGHT);
         player = new Player(0, 0);
         playerInputController = new PlayerInputController(player, gameMap);
 
@@ -39,7 +40,12 @@ public class GameScreen  implements Screen {
         playerInputController.update(delta);
         clearScreen();
 
-        isometricRenderer.render(gameMap, player,360, 120);
+        isometricRenderer.render(
+            gameMap,
+            player,
+            GameConfig.MAP_OFFSET_X,
+            GameConfig.MAP_OFFSET_Y
+        );
 
         batch.begin();
         font.getData().setScale(1.5f);
