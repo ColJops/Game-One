@@ -16,6 +16,8 @@ public final class GameConfig {
     public static final float WORLD_WIDTH = 800f;
     public static final float WORLD_HEIGHT = 480f;
 
+    public static final float CAMERA_FOLLOW_SPEED = 6f;
+
     private GameConfig() {
         // Utility class
     }

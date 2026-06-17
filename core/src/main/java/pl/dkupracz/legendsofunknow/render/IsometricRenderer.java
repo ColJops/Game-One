@@ -126,6 +126,14 @@ public class IsometricRenderer {
         };
     }
 
+    public float getScreenX(int mapX, int mapY, float offsetX) {
+        return toScreenX(mapX, mapY, offsetX);
+    }
+
+    public float getScreenY(int mapX, int mapY, float offsetY) {
+        return toScreenY(mapX, mapY, offsetY);
+    }
+
     public void setProjectionMatrix(Matrix4 projectionMatrix) {
         shapeRenderer.setProjectionMatrix(projectionMatrix);
     }

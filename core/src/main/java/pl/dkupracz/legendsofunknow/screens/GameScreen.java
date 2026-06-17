@@ -50,6 +50,7 @@ public class GameScreen  implements Screen {
     public void render(float delta) {
 
         playerInputController.update(delta);
+        updateCamera(delta);
 
         clearScreen();
 
@@ -68,17 +69,35 @@ public class GameScreen  implements Screen {
         font.getData().setScale(1.5f);
         font.draw(batch, "Legends of Unknow", 30, 460);
         font.getData().setScale(1f);
-        font.draw(batch, "Checkpoint 9: camera + viewport", 30, 435);
+        font.draw(batch, "Checkpoint 10: camera follow", 30, 435);
         font.draw(batch, "Player position: " + player.getMapX() + ", " + player.getMapY(), 30, 410);
         font.draw(batch, "Move: W/A/S/D or arrows", 30, 385);
 
         batch.end();
     }
 
-
     private void clearScreen() {
         Gdx.gl.glClearColor(0.0f, 0.025f, 0.04f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
+
+    private void updateCamera(float delta) {
+        float playerScreenX = isometricRenderer.getScreenX(
+            player.getMapX(),
+            player.getMapY(),
+            GameConfig.MAP_OFFSET_X
+        );
+
+        float playerScreenY = isometricRenderer.getScreenY(
+            player.getMapX(),
+            player.getMapY(),
+            GameConfig.MAP_OFFSET_Y
+        );
+
+        camera.position.x += (playerScreenX - camera.position.x) * GameConfig.CAMERA_FOLLOW_SPEED * delta;
+        camera.position.y += (playerScreenY - camera.position.y) * GameConfig.CAMERA_FOLLOW_SPEED * delta;
+
+        camera.update();
     }
 
     @Override
