@@ -13,6 +13,8 @@ public class PlayerInputController {
 
     private float moveCooldown;
 
+    private float debugCooldown;
+
     public PlayerInputController(Player player, GameMap gameMap) {
         this.player = player;
         this.gameMap = gameMap;
@@ -20,6 +22,9 @@ public class PlayerInputController {
 
     public void update(float delta) {
         moveCooldown -= delta;
+
+        debugCooldown -= delta;
+        handleDebugInput();
 
         if (moveCooldown > 0f) {
             return;
@@ -37,6 +42,20 @@ public class PlayerInputController {
         } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             player.moveBy(1, 0, gameMap);
             resetCooldown();
+        }
+    }
+
+    private void handleDebugInput() {
+        if (debugCooldown > 0f) {
+            return;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.H)) {
+            player.takeDamage(10);
+            debugCooldown = 0.2f;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+            player.heal(10);
+            debugCooldown = 0.2f;
         }
     }
 
