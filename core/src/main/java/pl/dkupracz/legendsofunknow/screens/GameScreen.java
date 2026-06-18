@@ -14,6 +14,7 @@ import pl.dkupracz.legendsofunknow.render.IsometricRenderer;
 import pl.dkupracz.legendsofunknow.world.GameMap;
 import pl.dkupracz.legendsofunknow.input.PlayerInputController;
 import pl.dkupracz.legendsofunknow.config.GameConfig;
+import pl.dkupracz.legendsofunknow.ui.HudRenderer;
 
 public class GameScreen  implements Screen {
 
@@ -29,18 +30,20 @@ public class GameScreen  implements Screen {
     private PlayerInputController playerInputController;
     private GameMap gameMap;
     private IsometricRenderer isometricRenderer;
+    private HudRenderer hudRenderer;
 
     private float cameraMinX;
     private float cameraMaxX;
     private float cameraMinY;
     private float cameraMaxY;
 
-    Player player;
+    private Player player;
 
     @Override
     public void show() {
         batch = new SpriteBatch();
         font = new BitmapFont();
+        hudRenderer = new HudRenderer(batch, font);
 
         worldCamera = new OrthographicCamera();
         worldViewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, worldCamera);
@@ -108,16 +111,7 @@ public class GameScreen  implements Screen {
 
     private void renderHud() {
         batch.setProjectionMatrix(hudCamera.combined);
-
-        batch.begin();
-        font.getData().setScale(1.5f);
-        font.draw(batch, "Legends of Unknow", 30, 460);
-
-        font.getData().setScale(1f);
-        font.draw(batch, "Checkpoint 13: dynamic camera bounds", 30, 435);
-        font.draw(batch, "Player position: " + player.getMapX() + ", " + player.getMapY(), 30, 410);
-        font.draw(batch, "Move: W/A/S/D or arrows", 30, 385);
-        batch.end();
+        hudRenderer.render(player);
     }
 
     private void clearScreen() {
