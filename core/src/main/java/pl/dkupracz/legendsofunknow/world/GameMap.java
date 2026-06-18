@@ -22,12 +22,15 @@ public class GameMap {
         }
 
         // Kilka testowych blokad/ścian
-        tiles[2][2] = TileType.BLOCKED;
-        tiles[2][3] = TileType.BLOCKED;
-        tiles[2][4] = TileType.BLOCKED;
-        tiles[5][6] = TileType.BLOCKED;
-        tiles[6][6] = TileType.BLOCKED;
-        tiles[7][6] = TileType.BLOCKED;
+        tiles[10][10] = TileType.BLOCKED;
+        tiles[10][11] = TileType.BLOCKED;
+        tiles[10][12] = TileType.BLOCKED;
+        tiles[11][12] = TileType.BLOCKED;
+        tiles[12][12] = TileType.BLOCKED;
+
+        tiles[15][4] = TileType.BLOCKED;
+        tiles[16][4] = TileType.BLOCKED;
+        tiles[17][4] = TileType.BLOCKED;
 
         // Punkt startowy gracza na przyszłość
         tiles[0][0] = TileType.SPAWN;

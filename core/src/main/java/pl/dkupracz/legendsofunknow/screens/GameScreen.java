@@ -29,6 +29,12 @@ public class GameScreen  implements Screen {
     private PlayerInputController playerInputController;
     private GameMap gameMap;
     private IsometricRenderer isometricRenderer;
+
+    private float cameraMinX;
+    private float cameraMaxX;
+    private float cameraMinY;
+    private float cameraMaxY;
+
     Player player;
 
     @Override
@@ -55,6 +61,28 @@ public class GameScreen  implements Screen {
         playerInputController = new PlayerInputController(player, gameMap);
 
         isometricRenderer = new IsometricRenderer();
+
+        calculateCameraBounds();
+    }
+
+    private void calculateCameraBounds() {
+        float x0 = isometricRenderer.getScreenX(0, 0, GameConfig.MAP_OFFSET_X);
+        float y0 = isometricRenderer.getScreenY(0, 0, GameConfig.MAP_OFFSET_Y);
+
+        float x1 = isometricRenderer.getScreenX(gameMap.getWidth() - 1, 0, GameConfig.MAP_OFFSET_X);
+        float y1 = isometricRenderer.getScreenY(gameMap.getWidth() - 1, 0, GameConfig.MAP_OFFSET_Y);
+
+        float x2 = isometricRenderer.getScreenX(0, gameMap.getHeight() - 1, GameConfig.MAP_OFFSET_X);
+        float y2 = isometricRenderer.getScreenY(0, gameMap.getHeight() - 1, GameConfig.MAP_OFFSET_Y);
+
+        float x3 = isometricRenderer.getScreenX(gameMap.getWidth() - 1, gameMap.getHeight() - 1, GameConfig.MAP_OFFSET_X);
+        float y3 = isometricRenderer.getScreenY(gameMap.getWidth() - 1, gameMap.getHeight() - 1, GameConfig.MAP_OFFSET_Y);
+
+        cameraMinX = Math.min(Math.min(x0, x1), Math.min(x2, x3));
+        cameraMaxX = Math.max(Math.max(x0, x1), Math.max(x2, x3));
+
+        cameraMinY = Math.min(Math.min(y0, y1), Math.min(y2, y3));
+        cameraMaxY = Math.max(Math.max(y0, y1), Math.max(y2, y3));
     }
 
     @Override
@@ -86,7 +114,7 @@ public class GameScreen  implements Screen {
         font.draw(batch, "Legends of Unknow", 30, 460);
 
         font.getData().setScale(1f);
-        font.draw(batch, "Checkpoint 11: separate HUD camera", 30, 435);
+        font.draw(batch, "Checkpoint 13: dynamic camera bounds", 30, 435);
         font.draw(batch, "Player position: " + player.getMapX() + ", " + player.getMapY(), 30, 410);
         font.draw(batch, "Move: W/A/S/D or arrows", 30, 385);
         batch.end();
@@ -110,10 +138,23 @@ public class GameScreen  implements Screen {
             GameConfig.MAP_OFFSET_Y
         );
 
-        worldCamera.position.x += (playerScreenX - worldCamera.position.x) * GameConfig.CAMERA_FOLLOW_SPEED * delta;
-        worldCamera.position.y += (playerScreenY - worldCamera.position.y) * GameConfig.CAMERA_FOLLOW_SPEED * delta;
+        worldCamera.position.x += (playerScreenX - worldCamera.position.x)
+            * GameConfig.CAMERA_FOLLOW_SPEED * delta;
+
+        worldCamera.position.y += (playerScreenY - worldCamera.position.y)
+            * GameConfig.CAMERA_FOLLOW_SPEED * delta;
+
+        clampWorldCamera();
 
         worldCamera.update();
+    }
+
+    private void clampWorldCamera() {
+        worldCamera.position.x = Math.clamp(worldCamera.position.x,
+            cameraMinX, cameraMaxX);
+
+        worldCamera.position.y = Math.clamp(worldCamera.position.y,
+            cameraMinY, cameraMaxY);
     }
 
     @Override
