@@ -9,12 +9,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import pl.dkupracz.legendsofunknow.entities.Enemy;
 import pl.dkupracz.legendsofunknow.entities.Player;
 import pl.dkupracz.legendsofunknow.render.IsometricRenderer;
 import pl.dkupracz.legendsofunknow.world.GameMap;
 import pl.dkupracz.legendsofunknow.input.PlayerInputController;
 import pl.dkupracz.legendsofunknow.config.GameConfig;
 import pl.dkupracz.legendsofunknow.ui.HudRenderer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameScreen  implements Screen {
 
@@ -38,6 +42,7 @@ public class GameScreen  implements Screen {
     private float cameraMaxY;
 
     private Player player;
+    private List<Enemy> enemies;
 
     @Override
     public void show() {
@@ -61,6 +66,12 @@ public class GameScreen  implements Screen {
 
         gameMap = new GameMap(GameConfig.MAP_WIDTH, GameConfig.MAP_HEIGHT);
         player = new Player(0, 0);
+
+        enemies = new ArrayList<>();
+        enemies.add(new Enemy("Skeleton", 5, 5, 30));
+        enemies.add(new Enemy("Ghoul", 8, 3, 40));
+        enemies.add(new Enemy("Cultist", 12, 10, 50));
+
         playerInputController = new PlayerInputController(player, gameMap);
 
         isometricRenderer = new IsometricRenderer();
@@ -104,6 +115,7 @@ public class GameScreen  implements Screen {
         isometricRenderer.render(
             gameMap,
             player,
+            enemies,
             GameConfig.MAP_OFFSET_X,
             GameConfig.MAP_OFFSET_Y
         );

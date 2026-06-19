@@ -3,7 +3,9 @@ package pl.dkupracz.legendsofunknow.render;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import java.util.List;
 
+import pl.dkupracz.legendsofunknow.entities.Enemy;
 import pl.dkupracz.legendsofunknow.entities.Player;
 import pl.dkupracz.legendsofunknow.world.GameMap;
 import pl.dkupracz.legendsofunknow.world.TileType;
@@ -19,10 +21,34 @@ public class IsometricRenderer {
         this.shapeRenderer = new ShapeRenderer();
     }
 
-    public void render(GameMap map, Player player, float offsetX, float offsetY) {
+    public void render(GameMap map, Player player, List<Enemy> enemies, float offsetX, float offsetY) {
         renderFilledTiles(map, offsetX, offsetY);
         renderTileOutlines(map, offsetX, offsetY);
+        renderEnemies(enemies, offsetX, offsetY);
         renderPlayer(player, offsetX, offsetY);
+    }
+
+    private void renderEnemies(List<Enemy> enemies, float offsetX, float offsetY) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for (Enemy enemy : enemies) {
+            if (!enemy.isDead()) {
+                drawEnemy(enemy, offsetX, offsetY);
+            }
+        }
+
+        shapeRenderer.end();
+    }
+
+    private void drawEnemy(Enemy enemy, float offsetX, float offsetY) {
+        float screenX = toScreenX(enemy.getMapX(), enemy.getMapY(), offsetX);
+        float screenY = toScreenY(enemy.getMapX(), enemy.getMapY(), offsetY);
+
+        shapeRenderer.setColor(new Color(0.65f, 0.10f, 0.10f, 1f));
+        shapeRenderer.circle(screenX, screenY + 12, 8);
+
+        shapeRenderer.setColor(new Color(0.25f, 0.04f, 0.04f, 1f));
+        shapeRenderer.rect(screenX - 5, screenY - 2, 10, 14);
     }
 
     private void renderFilledTiles(GameMap map, float offsetX, float offsetY) {
