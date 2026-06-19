@@ -72,7 +72,7 @@ public class GameScreen  implements Screen {
         enemies.add(new Enemy("Ghoul", 8, 3, 40));
         enemies.add(new Enemy("Cultist", 12, 10, 50));
 
-        playerInputController = new PlayerInputController(player, gameMap);
+        playerInputController = new PlayerInputController(player, gameMap, enemies);
 
         isometricRenderer = new IsometricRenderer();
 
@@ -123,7 +123,7 @@ public class GameScreen  implements Screen {
 
     private void renderHud() {
         batch.setProjectionMatrix(hudCamera.combined);
-        hudRenderer.render(player);
+        hudRenderer.render(player, enemies);
     }
 
     private void clearScreen() {

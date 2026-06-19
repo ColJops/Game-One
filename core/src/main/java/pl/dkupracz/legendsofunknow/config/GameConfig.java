@@ -12,6 +12,8 @@ public final class GameConfig {
     public static final float MAP_OFFSET_Y = 120f;
 
     public static final float PLAYER_MOVE_COOLDOWN = 0.15f;
+    public static final int PLAYER_ATTACK_DAMAGE = 10;
+    public static final float PLAYER_ATTACK_COOLDOWN = 0.3f;
 
     public static final float WORLD_WIDTH = 800f;
     public static final float WORLD_HEIGHT = 480f;
