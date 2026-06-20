@@ -3,8 +3,8 @@ package pl.dkupracz.legendsofunknow.render;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.List;
 
@@ -13,22 +13,18 @@ import pl.dkupracz.legendsofunknow.entities.Player;
 import pl.dkupracz.legendsofunknow.world.GameMap;
 import pl.dkupracz.legendsofunknow.world.TileType;
 import pl.dkupracz.legendsofunknow.config.GameConfig;
-
-
+import pl.dkupracz.legendsofunknow.assets.GameAssets;
 
 public class IsometricRenderer {
 
     private final ShapeRenderer shapeRenderer;
     private final SpriteBatch spriteBatch;
-    private final Texture playerTexture;
-    private final Texture enemyTexture;
+    private final GameAssets gameAssets;
 
-    public IsometricRenderer() {
+    public IsometricRenderer(GameAssets gameAssets) {
         this.shapeRenderer = new ShapeRenderer();
         this.spriteBatch = new SpriteBatch();
-
-        this.playerTexture = new Texture("characters/player.png");
-        this.enemyTexture = new Texture("characters/enemy_skeleton.png");
+        this.gameAssets = gameAssets;
     }
 
     public void render(GameMap map, Player player, List<Enemy> enemies, float offsetX, float offsetY) {
@@ -54,12 +50,14 @@ public class IsometricRenderer {
         float screenX = toScreenX(enemy.getMapX(), enemy.getMapY(), offsetX);
         float screenY = toScreenY(enemy.getMapX(), enemy.getMapY(), offsetY);
 
+        Texture texture = gameAssets.getEnemySkeletonTexture();
+
         spriteBatch.draw(
-            enemyTexture,
-            screenX - enemyTexture.getWidth() / 2f,
+            texture,
+            screenX - texture.getWidth() / 2f,
             screenY,
-            enemyTexture.getWidth(),
-            enemyTexture.getHeight()
+            texture.getWidth(),
+            texture.getHeight()
         );
     }
 
@@ -91,16 +89,16 @@ public class IsometricRenderer {
         float screenX = toScreenX(player.getMapX(), player.getMapY(), offsetX);
         float screenY = toScreenY(player.getMapX(), player.getMapY(), offsetY);
 
+        Texture texture = gameAssets.getPlayerTexture();
+
         spriteBatch.begin();
-
         spriteBatch.draw(
-            playerTexture,
-            screenX - playerTexture.getWidth() / 2f,
+            texture,
+            screenX - texture.getWidth() / 2f,
             screenY,
-            playerTexture.getWidth(),
-            playerTexture.getHeight()
+            texture.getWidth(),
+            texture.getHeight()
         );
-
         spriteBatch.end();
     }
 
@@ -182,7 +180,5 @@ public class IsometricRenderer {
     public void dispose() {
         shapeRenderer.dispose();
         spriteBatch.dispose();
-        playerTexture.dispose();
-        enemyTexture.dispose();
     }
 }

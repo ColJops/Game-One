@@ -24,7 +24,7 @@ public class HudRenderer {
         font.draw(batch, "Legends of Unknow", 30, 460);
 
         font.getData().setScale(1f);
-        font.draw(batch, "Checkpoint 21: death state + restart", 30, 435);
+        font.draw(batch, "Checkpoint 23: refactor", 30, 435);
         font.draw(batch, "Player position: " + player.getMapX() + ", " + player.getMapY(), 30, 410);
         font.draw(batch, "HP: " + player.getCurrentHp() + " / " + player.getMaxHp(), 30, 385);
         font.draw(batch, "Move: W/A/S/D or arrows", 30, 360);

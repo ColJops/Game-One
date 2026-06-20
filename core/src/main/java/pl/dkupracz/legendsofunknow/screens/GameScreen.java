@@ -18,6 +18,7 @@ import pl.dkupracz.legendsofunknow.input.PlayerInputController;
 import pl.dkupracz.legendsofunknow.config.GameConfig;
 import pl.dkupracz.legendsofunknow.ui.HudRenderer;
 import pl.dkupracz.legendsofunknow.ai.EnemyAIController;
+import pl.dkupracz.legendsofunknow.assets.GameAssets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class GameScreen  implements Screen {
     private GameMap gameMap;
     private IsometricRenderer isometricRenderer;
     private HudRenderer hudRenderer;
+    private GameAssets gameAssets;
 
     private float cameraMinX;
     private float cameraMaxX;
@@ -52,6 +54,8 @@ public class GameScreen  implements Screen {
     public void show() {
         batch = new SpriteBatch();
         font = new BitmapFont();
+
+        gameAssets = new GameAssets();
         hudRenderer = new HudRenderer(batch, font);
 
         worldCamera = new OrthographicCamera();
@@ -79,7 +83,7 @@ public class GameScreen  implements Screen {
         playerInputController = new PlayerInputController(player, gameMap, enemies);
         enemyAIController = new EnemyAIController(enemies, gameMap , player);
 
-        isometricRenderer = new IsometricRenderer();
+        isometricRenderer = new IsometricRenderer(gameAssets);
 
         calculateCameraBounds();
     }
@@ -222,5 +226,6 @@ public class GameScreen  implements Screen {
         batch.dispose();
         font.dispose();
         isometricRenderer.dispose();
+        gameAssets.dispose();
     }
 }
