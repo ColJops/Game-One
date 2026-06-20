@@ -7,7 +7,7 @@ public class Player {
     private int mapX;
     private int mapY;
 
-    private int maxHp;
+    private final int maxHp;
     private int currentHp;
 
     public Player(int mapX, int mapY) {
@@ -66,5 +66,9 @@ public class Player {
 
     public int getCurrentHp() {
         return currentHp;
+    }
+
+    public void restoreFullHp() {
+        currentHp = maxHp;
     }
 }

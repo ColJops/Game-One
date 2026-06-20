@@ -31,6 +31,11 @@ public class PlayerInputController {
         attackCooldown -= delta;
 
         handleDebugInput();
+
+        if (player.isDead()) {
+            return;
+        }
+
         handleAttackInput();
 
         if (moveCooldown > 0f) {

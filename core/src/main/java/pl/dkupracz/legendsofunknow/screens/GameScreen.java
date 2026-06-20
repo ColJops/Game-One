@@ -1,6 +1,7 @@
 package pl.dkupracz.legendsofunknow.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -73,7 +74,7 @@ public class GameScreen  implements Screen {
         enemies = new ArrayList<>();
         enemies.add(new Enemy("Skeleton", 5, 5, 30));
         enemies.add(new Enemy("Ghoul", 8, 3, 40));
-        enemies.add(new Enemy("Cultist", 12, 10, 50));
+        enemies.add(new Enemy("Cultist", 8, 10, 50));
 
         playerInputController = new PlayerInputController(player, gameMap, enemies);
         enemyAIController = new EnemyAIController(enemies, gameMap , player);
@@ -105,8 +106,13 @@ public class GameScreen  implements Screen {
 
     @Override
     public void render(float delta) {
-        playerInputController.update(delta);
-        enemyAIController.update(delta);
+        handleRestartInput();
+
+        if (!player.isDead()) {
+            playerInputController.update(delta);
+            enemyAIController.update(delta);
+        }
+
         updateCamera(delta);
 
         clearScreen();
@@ -166,6 +172,28 @@ public class GameScreen  implements Screen {
 
         worldCamera.position.y = Math.clamp(worldCamera.position.y,
             cameraMinY, cameraMaxY);
+    }
+
+    private void handleRestartInput() {
+        if (!player.isDead()) {
+            return;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            restartGame();
+        }
+    }
+
+    private void restartGame() {
+        player.setPosition(0, 0);
+        player.restoreFullHp();
+
+        enemies.clear();
+        enemies.add(new Enemy("Skeleton", 5, 5, 30));
+        enemies.add(new Enemy("Ghoul", 8, 3, 40));
+        enemies.add(new Enemy("Cultist", 8, 10, 50));
+
+        Gdx.app.log("Game", "Game restarted");
     }
 
     @Override
