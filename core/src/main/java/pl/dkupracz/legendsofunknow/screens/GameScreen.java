@@ -16,6 +16,7 @@ import pl.dkupracz.legendsofunknow.world.GameMap;
 import pl.dkupracz.legendsofunknow.input.PlayerInputController;
 import pl.dkupracz.legendsofunknow.config.GameConfig;
 import pl.dkupracz.legendsofunknow.ui.HudRenderer;
+import pl.dkupracz.legendsofunknow.ai.EnemyAIController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,8 @@ public class GameScreen  implements Screen {
     private Viewport hudViewport;
 
     private PlayerInputController playerInputController;
+    private EnemyAIController enemyAIController;
+
     private GameMap gameMap;
     private IsometricRenderer isometricRenderer;
     private HudRenderer hudRenderer;
@@ -73,6 +76,7 @@ public class GameScreen  implements Screen {
         enemies.add(new Enemy("Cultist", 12, 10, 50));
 
         playerInputController = new PlayerInputController(player, gameMap, enemies);
+        enemyAIController = new EnemyAIController(enemies, gameMap , player);
 
         isometricRenderer = new IsometricRenderer();
 
@@ -102,6 +106,7 @@ public class GameScreen  implements Screen {
     @Override
     public void render(float delta) {
         playerInputController.update(delta);
+        enemyAIController.update(delta);
         updateCamera(delta);
 
         clearScreen();

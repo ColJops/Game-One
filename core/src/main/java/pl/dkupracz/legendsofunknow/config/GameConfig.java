@@ -15,17 +15,14 @@ public final class GameConfig {
     public static final int PLAYER_ATTACK_DAMAGE = 10;
     public static final float PLAYER_ATTACK_COOLDOWN = 0.3f;
 
+    public static final int ENEMY_ATTACK_DAMAGE = 5;
+    public static final float ENEMY_MOVE_COOLDOWN = 0.8f;
+
     public static final float WORLD_WIDTH = 800f;
     public static final float WORLD_HEIGHT = 480f;
 
     public static final float CAMERA_FOLLOW_SPEED = 6f;
- /*
-    public static final float CAMERA_MIN_X = 250f;
-    public static final float CAMERA_MAX_X = 650f;
 
-    public static final float CAMERA_MIN_Y = 160f;
-    public static final float CAMERA_MAX_Y = 520f;
-*/
     private GameConfig() {
         // Utility class
     }

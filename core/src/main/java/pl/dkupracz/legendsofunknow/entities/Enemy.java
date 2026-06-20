@@ -1,5 +1,7 @@
 package pl.dkupracz.legendsofunknow.entities;
 
+import pl.dkupracz.legendsofunknow.world.GameMap;
+
 public class Enemy {
 
     private final String name;
@@ -52,6 +54,16 @@ public class Enemy {
 
         if (currentHp < 0) {
             currentHp = 0;
+        }
+    }
+
+    public void moveBy(int dx, int dy, GameMap gameMap) {
+        int newX = mapX + dx;
+        int newY = mapY + dy;
+
+        if (gameMap.isWalkable(newX, newY)) {
+            mapX = newX;
+            mapY = newY;
         }
     }
 }
